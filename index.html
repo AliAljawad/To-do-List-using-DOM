@@ -12,11 +12,11 @@
         <nav>
           <h3>ToDoLy</h3>
           <img src="assets/images/profile-pic.jpeg" alt="profile picture" />
-          <p>My tasks</p>
+          <p id="myTasks">My tasks</p>
           <ul>
-            <li><a href="#">Pending</a></li>
-            <li><a href="#">Completed</a></li>
-            <li><a href="#">Past due</a></li>
+            <li><a href="#pending" onclick="showTaskList('pending')"">Pending</a></li>
+            <li><a href="#completed" onclick="showTaskList('completed')">Completed</a></li>
+            <li><a href="#past-due" onclick="showTaskList('past-due')">Past due</a></li>
           </ul>
           <button class="add-task-btn">+ Add another Task</button>
         </nav>
@@ -26,7 +26,7 @@
         <div class="tasks">
           <div id="pending-tasks">
             <h3>Pending</h3>
-            <div class="task-list"></div>
+            <div class="task-list" ></div>
             <button class="add-task-btn">+ Add another Task</button>
           </div>
           <div id="completed-tasks">
