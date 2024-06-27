@@ -1,90 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="style/style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="style/style.css" />
     <title>To-Do List</title>
-</head>
-<body>
+  </head>
+  <body>
     <div class="page">
-        <div class="navbar">
-            <nav>
-                <h3>ToDoLy</h3>
-                <img src="assets/images/profile-pic.jpeg" alt="profile picture">
-                <p>My tasks</p>
-                <ul>
-                    <li><a href="#">Pending</a></li>
-                    <li><a href="#">Completed</a></li>
-                    <li><a href="#">Past due</a></li>
-                </ul>
-                <button class="add-task-btn">+ Add another Task</button>
-            </nav>
+      <div class="navbar">
+        <nav>
+          <h3>ToDoLy</h3>
+          <img src="assets/images/profile-pic.jpeg" alt="profile picture" />
+          <p>My tasks</p>
+          <ul>
+            <li><a href="#">Pending</a></li>
+            <li><a href="#">Completed</a></li>
+            <li><a href="#">Past due</a></li>
+          </ul>
+          <button class="add-task-btn">+ Add another Task</button>
+        </nav>
+      </div>
+      <div class="main-content">
+        <h1>My Tasks</h1>
+        <div class="tasks">
+          <div id="pending-tasks">
+            <h3>Pending</h3>
+            <div class="task-list"></div>
+            <button class="add-task-btn">+ Add another Task</button>
+          </div>
+          <div id="completed-tasks">
+            <h3>Completed</h3>
+            <div class="task-list"></div>
+          </div>
+          <div id="past-due-tasks">
+            <h3>Past Due</h3>
+            <div class="task-list"></div>
+          </div>
         </div>
-        <div class="main-content">
-            <h1>My Tasks</h1>
-            <div class="tasks">
-                <div id="pending-tasks">
-                    <h3>pending</h3>
-                    <div class="task-list">
-                        <div class="task">
-                            UI UX meeting
-                        </div>
-                        <div class="task">
-                            UI UX meeting
-                           
-                        </div>
-                    </div>
-                    <button class="add-task-btn">+ Add another Task</button>
-                </div>
-                <div id="completed-tasks">
-                    <h3>Completed</h3>
-                    <div class="task-list">
-                        <div class="task">
-                            Figma Intro
-                        
-                        </div>
-                    </div>
-                    <button class="add-task-btn">+ Add another Task</button>
-                </div>
-                <div id="past-due-tasks">
-                    <h3>Past due</h3>
-                    <div class="task-list">
-                        <div class="task">
-                            Assignment 1
-                             
-                        </div>
-                    </div>
-                    <button class="add-task-btn">+ Add another Task</button>
-                </div>
-        
-            </div>
-        </div>
+      </div>
     </div>
 
-    <!--hidden add new task form-->
+    <!-- hidden add new task form -->
     <div id="add-form" class="form">
-        <div class="form-content">
-            <span class="close-btn">&times;</span>
-            <h2>Add Task</h2>
-            <form id="task-form">
-                <label for="descr">Task Description:</label>
-                <input type="text" id="descr" name="descr" required>
-                
-                <label for="date">Date:</label>
-                <input type="date" id="date" name="date" required>
-                
-                <label for="task-time">Time:</label>
-                <input type="time" id="task-time" name="task-time" required>
-                
-                <label for="assign-to">Assign to:</label>
-                <input type="text" id="assign-to" name="assign-to" required>
-                
-                <button type="submit">Add Task</button>
-            </form>
-        </div>
+      <div class="form-content">
+        <span class="close-btn">&times;</span>
+        <h2>Add Task</h2>
+        <form id="task-form">
+          <label for="descr">Task Description:</label>
+          <input type="text" id="descr" name="descr" required />
+
+          <label for="date">Date:</label>
+          <input type="date" id="date" name="date" required />
+
+          <label for="task-time">Time:</label>
+          <input type="time" id="task-time" name="task-time" required />
+
+          <label for="assign-to">Assign to:</label>
+          <input type="text" id="assign-to" name="assign-to" required />
+
+          <button type="submit" id="submit">Add Task</button>
+        </form>
+      </div>
     </div>
 
     <script src="script/script.js"></script>
-</body>
+  </body>
 </html>

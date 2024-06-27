@@ -1,10 +1,11 @@
-/* Existing styles */
+/* Reset and Box Sizing */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Body and General Styles */
 body {
     font-family: Arial, sans-serif;
     background-color: #222831;
@@ -106,7 +107,7 @@ body {
 }
 
 .tasks > div {
-
+    flex-grow: 1;
     background-color: #000000;
     padding: 20px;
     border-radius: 10px;
@@ -147,21 +148,6 @@ body {
 
 .task-list::-webkit-scrollbar-thumb:hover {
     background-color: #555;
-}
-
-#add-task-btn {
-    padding: 10px 20px;
-    background-color: #88C0D0;
-    color: #2E3440;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    text-align: center;
-    width: 100%;
-}
-
-#add-task-btn:hover {
-    background-color: #81A1C1;
 }
 
 #add-form {
@@ -228,11 +214,22 @@ body {
     background-color: #81A1C1;
 }
 
-.tasks .task {
-    background-color: #333;
-    padding: 15px;
-    margin-bottom: 15px;
+.task-item {
+    background-color:black;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
     border-radius: 5px;
-    width: 100%;
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
+
+.task-item button {
+    background-color: #000000;
+    margin: 2px;
+    border: none;
+    
+    cursor: pointer;
+}
+
