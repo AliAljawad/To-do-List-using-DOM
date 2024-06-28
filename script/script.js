@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <span>${descrValue} (Assigned to: ${assignValue})</span>
             <span>${dateValue} ${timeValue}</span>
             <button>✅</button>
+            <button class="delete-btn">❌</button>
         `;
 
         const completeBtn = taskItem.querySelector('button');
@@ -55,6 +56,10 @@ document.addEventListener('DOMContentLoaded', function() {
             taskItem.remove();
             document.getElementById('completed-tasks').querySelector('.task-list').appendChild(taskItem);
             completeBtn.remove();
+        });
+        const deleteBtn = taskItem.querySelector('.delete-btn');
+        deleteBtn.addEventListener('click', function() {
+            taskItem.remove();
         });
 
         pendingTasksList.appendChild(taskItem);
