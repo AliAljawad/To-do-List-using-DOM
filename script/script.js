@@ -1,109 +1,195 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById("add-form");
-    const buttons = document.querySelectorAll(".add-task-btn");
-    const exit = document.querySelector(".close-btn");
-    const pendingTasksList = document.getElementById('pending-tasks').querySelector('.task-list');
-    const pastDueTasksList = document.getElementById('past-due-tasks').querySelector('.task-list');
-    const pendingTaskSection = document.getElementById('pending-tasks');
-    const completedTasksListSection = document.getElementById('completed-tasks');
-    const pastDueTasksSection = document.getElementById('past-due-tasks');
-    const tasks= document.getElementById('myTasks');
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("add-form");
+  const buttons = document.querySelectorAll(".add-task-btn");
+  const exit = document.querySelector(".close-btn");
+  const pendingTasksList = document.getElementById("pending-tasks").querySelector(".task-list");
+  const pastDueTasksList = document.getElementById("past-due-tasks").querySelector(".task-list");
+  const completedTasksList = document.getElementById("completed-tasks").querySelector(".task-list");
+  const pendingTaskSection = document.getElementById("pending-tasks");
+  const completedTasksListSection = document.getElementById("completed-tasks");
+  const pastDueTasksSection = document.getElementById("past-due-tasks");
+  const myTasksHeader = document.querySelector(".navbar p");
 
-    buttons.forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            form.style.display = "block";
-        });
-    });
+  const tasksKey = "tasks";
+  let tasks = JSON.parse(localStorage.getItem(tasksKey)) || {
+    pending: [],
+    completed: [],
+    pastDue: [],
+  };
 
-    exit.addEventListener('click', function() {
-        form.style.display = "none";
-    });
+  function saveTasks() {
+    localStorage.setItem(tasksKey, JSON.stringify(tasks));
+  }
 
-    window.addEventListener('click', function(event) {
-        if (event.target === form) {
-            form.style.display = "none";
-        }
-    });
+  function loadTasks() {
+    tasks.pending.forEach((task) => addTaskToDOM(task, "pending"));
+    tasks.completed.forEach((task) => addTaskToDOM(task, "completed"));
+    tasks.pastDue.forEach((task) => addTaskToDOM(task, "past-due"));
+  }
 
-    const descrInput = document.getElementById("descr");
-    const dateInput = document.getElementById("date");
-    const timeInput = document.getElementById("task-time");
-    const assignInput = document.getElementById("assign-to");
-
-    const submitButton = document.getElementById("submit");
-
-    submitButton.addEventListener("click", function (e) {
-        e.preventDefault(); 
-
-        const descrValue = descrInput.value;
-        const dateValue = dateInput.value;
-        const timeValue = timeInput.value;
-        const assignValue = assignInput.value;
-
-        const taskItem = document.createElement('div');
-        taskItem.className = 'task-item';
-        taskItem.dataset.dueDate = dateValue;
-        taskItem.dataset.dueTime = timeValue;
-        taskItem.innerHTML = `
-            <span>${descrValue} (Assigned to: ${assignValue})</span>
-            <span>${dateValue} ${timeValue}</span>
-            <button>✅</button>
+  function addTaskToDOM(task, type) {
+    const taskItem = document.createElement("div");
+    taskItem.className = "task-item";
+    taskItem.dataset.dueDate = task.dueDate;
+    taskItem.dataset.dueTime = task.dueTime;
+    taskItem.innerHTML = `
+            <span>${task.description} (Assigned to: ${task.assignedTo})</span>
+            <span>${task.dueDate} ${task.dueTime}</span>
+            <button class="complete-btn">✅</button>
+            <button class="delete-btn">❌</button>
         `;
 
-        const completeBtn = taskItem.querySelector('button');
-        completeBtn.addEventListener('click', function() {
-            taskItem.remove();
-            document.getElementById('completed-tasks').querySelector('.task-list').appendChild(taskItem);
-            completeBtn.remove();
-        });
-
-        pendingTasksList.appendChild(taskItem);
-
-        form.style.display = "none";
-        document.getElementById('task-form').reset();
+    const completeBtn = taskItem.querySelector(".complete-btn");
+    completeBtn.addEventListener("click", function () {
+      taskItem.remove();
+      tasks.pending = tasks.pending.filter(
+        (t) =>
+          t.description !== task.description ||
+          t.dueDate !== task.dueDate ||
+          t.dueTime !== task.dueTime
+      );
+      task.type = "completed";
+      tasks.completed.push(task);
+      saveTasks();
+      addTaskToDOM(task, "completed");
     });
 
-    function checkPastDueTasks() {
-        const now = new Date();
-        const pendingTasks = pendingTasksList.querySelectorAll('.task-item');
-        pendingTasks.forEach(taskItem => {
-            const dueDate = new Date(`${taskItem.dataset.dueDate}T${taskItem.dataset.dueTime}`);
-            if (now > dueDate) {
-                taskItem.remove();
-                pastDueTasksList.appendChild(taskItem);
-                const completeBtn = taskItem.querySelector('button');
-                if (completeBtn) completeBtn.remove();
-            }
-        });
-    }
+    const deleteBtn = taskItem.querySelector(".delete-btn");
+    deleteBtn.addEventListener("click", function () {
+      taskItem.remove();
+      tasks[type] = tasks[type].filter(
+        (t) =>
+          t.description !== task.description ||
+          t.dueDate !== task.dueDate ||
+          t.dueTime !== task.dueTime
+      );
+      saveTasks();
+    });
 
-    setInterval(checkPastDueTasks, 60000);
-    checkPastDueTasks();
-    window.showTaskList = function showTaskList(taskType) { 
-        pastDueTasksSection.style.display = "none";
-        pendingTaskSection.style.display = "none";
-        completedTasksListSection.style.display = "none"; 
-        if (taskType === 'all') {
-            pendingTaskSection.style.display = "block";
-            completedTasksListSection.style.display = "block";
-            pastDueTasksSection.style.display = "block";
-        } else {
-        switch (taskType) {
-            case 'pending':
-                pendingTaskSection.style.display = 'block';
-                break;
-            case 'completed':
-                completedTasksListSection.style.display = 'block';
-                break;
-            case 'past-due':
-                pastDueTasksSection.style.display = 'block';
-                break;
-            
-        }
+    switch (type) {
+      case "pending":
+        pendingTasksList.appendChild(taskItem);
+        break;
+      case "completed":
+        completedTasksList.appendChild(taskItem);
+        completeBtn.remove();
+        break;
+      case "past-due":
+        pastDueTasksList.appendChild(taskItem);
+        completeBtn.remove();
+        break;
     }
-}
-tasks.addEventListener('click', function() {
-    showTaskList('all');
-});
+  }
 
+  buttons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      form.style.display = "block";
+    });
+  });
+
+  exit.addEventListener("click", function () {
+    form.style.display = "none";
+  });
+
+  window.addEventListener("click", function (event) {
+    if (event.target === form) {
+      form.style.display = "none";
+    }
+  });
+
+  const descrInput = document.getElementById("descr");
+  const dateInput = document.getElementById("date");
+  const timeInput = document.getElementById("task-time");
+  const assignInput = document.getElementById("assign-to");
+
+  const submitButton = document.getElementById("submit");
+
+  submitButton.addEventListener("click", function (e) {
+    e.preventDefault();
+
+    const task = {
+      description: descrInput.value,
+      dueDate: dateInput.value,
+      dueTime: timeInput.value,
+      assignedTo: assignInput.value,
+      type: "pending",
+    };
+
+    tasks.pending.push(task);
+    saveTasks();
+
+    addTaskToDOM(task, "pending");
+
+    form.style.display = "none";
+    document.getElementById("task-form").reset();
+  });
+
+  function checkPastDueTasks() {
+    const now = new Date();
+    const pendingTasks = pendingTasksList.querySelectorAll(".task-item");
+    pendingTasks.forEach((taskItem) => {
+      const dueDate = new Date(
+        `${taskItem.dataset.dueDate}T${taskItem.dataset.dueTime}`
+      );
+      if (now > dueDate) {
+        const task = {
+          description: taskItem
+            .querySelector("span")
+            .textContent.split(" (Assigned to: ")[0],
+          dueDate: taskItem.dataset.dueDate,
+          dueTime: taskItem.dataset.dueTime,
+          assignedTo: taskItem
+            .querySelector("span")
+            .textContent.split("Assigned to: ")[1]
+            .split(")")[0],
+          type: "past-due",
+        };
+
+        tasks.pending = tasks.pending.filter(
+          (t) =>
+            t.description !== task.description ||
+            t.dueDate !== task.dueDate ||
+            t.dueTime !== task.dueTime
+        );
+        tasks.pastDue.push(task);
+        saveTasks();
+
+        taskItem.remove();
+        addTaskToDOM(task, "past-due");
+      }
+    });
+  }
+
+  setInterval(checkPastDueTasks, 10000);
+  checkPastDueTasks();
+
+  window.showTaskList = function (taskType) {
+    pendingTaskSection.style.display = "none";
+    completedTasksListSection.style.display = "none";
+    pastDueTasksSection.style.display = "none";
+
+    if (taskType === "all") {
+      pendingTaskSection.style.display = "flex";
+      completedTasksListSection.style.display = "flex";
+      pastDueTasksSection.style.display = "flex";
+    } else {
+      switch (taskType) {
+        case "pending":
+          pendingTaskSection.style.display = "flex";
+          break;
+        case "completed":
+          completedTasksListSection.style.display = "flex";
+          break;
+        case "past-due":
+          pastDueTasksSection.style.display = "flex";
+          break;
+      }
+    }
+  };
+
+  myTasksHeader.addEventListener("click", function () {
+    showTaskList("all");
+  });
+
+  loadTasks();
 });
