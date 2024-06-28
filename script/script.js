@@ -89,19 +89,19 @@ document.addEventListener('DOMContentLoaded', function() {
         pendingTaskSection.style.display = "none";
         completedTasksListSection.style.display = "none"; 
         if (taskType === 'all') {
-            pendingTaskSection.style.display = "block";
-            completedTasksListSection.style.display = "block";
-            pastDueTasksSection.style.display = "block";
+            pendingTaskSection.style.display = "flex";
+            completedTasksListSection.style.display = "flex";
+            pastDueTasksSection.style.display = "flex";
         } else {
         switch (taskType) {
             case 'pending':
-                pendingTaskSection.style.display = 'block';
+                pendingTaskSection.style.display = 'flex';
                 break;
             case 'completed':
-                completedTasksListSection.style.display = 'block';
+                completedTasksListSection.style.display = 'flex';
                 break;
             case 'past-due':
-                pastDueTasksSection.style.display = 'block';
+                pastDueTasksSection.style.display = 'flex';
                 break;
             
         }
